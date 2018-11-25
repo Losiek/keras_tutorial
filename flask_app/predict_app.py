@@ -32,12 +32,12 @@ def preprocess_image(image, target_size):
 print(" * Loading Keras model...")
 get_model()
 
-@app.route("/predict", methods=["POST"])
+@app.route("/predict", methods=['POST'])
 def predict():
     message = request.get_json(force=True)
     encoded = message['image']
     decoded = base64.b64decode(encoded)
-    image = Image.ope(io.BytesIO(decoded))
+    image = Image.open(io.BytesIO(decoded))
     processed_image = preprocess_image(image, target_size=(224, 224))
     
     prediction = model.predict(processed_image).tolist()
@@ -48,4 +48,4 @@ def predict():
             'cat': prediction[0][1]
         }
     }
-    return jsonfiy(response)
+    return jsonify(response)
